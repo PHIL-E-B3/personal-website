@@ -1,0 +1,305 @@
+/* Reset and Base Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #000;
+    color: #fff;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container */
+.container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+}
+
+/* Hero Section */
+.hero {
+    margin-bottom: 80px;
+}
+
+.name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    color: #fff;
+}
+
+.current {
+    font-size: 1.125rem;
+    color: #a0a0a0;
+    margin-bottom: 16px;
+}
+
+.current .highlight {
+    color: #fff;
+}
+
+.past {
+    font-size: 1.125rem;
+    color: #a0a0a0;
+    margin-bottom: 32px;
+    max-width: 560px;
+}
+
+/* Social Links */
+.social-links {
+    font-size: 1.125rem;
+}
+
+.social-links a {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.social-links a:hover {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+/* Section Headings */
+h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #fff;
+}
+
+/* Experience & Education Sections */
+.experience,
+.education {
+    margin-bottom: 60px;
+}
+
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.experience-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.experience-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.company {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.role {
+    font-size: 1rem;
+    color: #a0a0a0;
+}
+
+.date {
+    font-size: 0.875rem;
+    color: #666;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Skills Section */
+.skills {
+    margin-bottom: 80px;
+}
+
+.skills-list {
+    font-size: 1rem;
+    color: #a0a0a0;
+    line-height: 1.8;
+}
+
+.skill-category {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Writing Section */
+.writing {
+    margin-bottom: 80px;
+}
+
+.year-group {
+    margin-bottom: 32px;
+}
+
+.year {
+    display: block;
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.post-list {
+    list-style: none;
+}
+
+.post-list li {
+    margin-bottom: 8px;
+}
+
+.post-list a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.125rem;
+    transition: color 0.2s ease;
+    display: inline-block;
+}
+
+.post-list a:hover {
+    color: #3b82f6;
+}
+
+/* Photography Section */
+.photography {
+    margin-bottom: 80px;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.photo-item {
+    break-inside: avoid;
+}
+
+.photo-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.photo-item:hover img {
+    transform: scale(1.02);
+    opacity: 0.9;
+}
+
+/* Photo Placeholders - Remove when adding real images */
+.photo-placeholder {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 0.875rem;
+    min-height: 200px;
+}
+
+.photo-item figcaption {
+    margin-top: 12px;
+    color: #888;
+    font-size: 0.9375rem;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 60px 20px 80px;
+    }
+
+    .name {
+        font-size: 2rem;
+    }
+
+    .current,
+    .past,
+    .social-links,
+    .post-list a {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    .photo-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .experience-item {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .date {
+        font-size: 0.8125rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 40px 16px 60px;
+    }
+
+    .name {
+        font-size: 1.75rem;
+        margin-bottom: 24px;
+    }
+
+    .hero {
+        margin-bottom: 60px;
+    }
+
+    .writing,
+    .photography,
+    .experience,
+    .education,
+    .skills {
+        margin-bottom: 50px;
+    }
+
+    .company {
+        font-size: 1rem;
+    }
+
+    .role {
+        font-size: 0.9375rem;
+    }
+}
+
+/* Selection */
+::selection {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+/* Focus styles for accessibility */
+a:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
