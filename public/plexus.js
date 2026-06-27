@@ -1,4 +1,5 @@
 (function(){
+  // Plexus network with year-based contribution filtering
   var dataEl=document.getElementById('site-data');
   var DATA=dataEl?JSON.parse(dataEl.textContent):{yearData:{},currentYear:new Date().getFullYear()};
   var yearData=DATA.yearData||{};
