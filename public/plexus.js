@@ -59,7 +59,7 @@
   var rail=document.getElementById('rail'), tip=document.getElementById('tip');
   if(rail){ months.forEach(function(m,mi){ var row=document.createElement('div'); row.className='mrow';
     var lbl=document.createElement('span'); lbl.className='mlbl'+(mi===0?' cur':''); lbl.textContent=m.label;
-    var dot=document.createElement('span'); dot.className='dot'; var s=6+m.count*2.0; dot.style.width=s+'px'; dot.style.height=s+'px';
+    var dot=document.createElement('span'); dot.className='dot'; var s=Math.min(32, 6+m.count*2.0); dot.style.width=s+'px'; dot.style.height=s+'px';
     row.appendChild(lbl); row.appendChild(dot);
     var fid=null; for(var qi=0;qi<nodes.length;qi++){ if(nodes[qi].month===mi){ fid=nodes[qi].id; break; } }
     (function(fid,dotEl){ row.addEventListener('mouseenter',function(e){ if(fid!==null) setNode(fid,dotEl); showTip(m.label+' '+m.year+' &middot; <b>'+m.count+'</b> contributions',e); });
