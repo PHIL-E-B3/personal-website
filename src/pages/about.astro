@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import experience from '../data/experience.json';
+import education from '../data/education.json';
+---
+<Base title="About — Philip Bunford" page="about">
+  <section class="hero" style="min-height:auto; padding-top:16vh; padding-bottom:4vh">
+    <h1 style="font-size:clamp(32px,5vw,52px)">About me</h1>
+    <p class="prose" style="margin-top:28px">I'm the founder of <span class="exp" data-link>Great Success</span>, a platform that allows aspiring finance bro's to practice for their interviews with company-related questions. Previously I've worked at <span class="exp" data-link>Mangrove</span>, where I led their AI transition, building agentic workflows that sped up the investments process. Before Mangrove, I interned at <span class="exp" data-link>UBP</span>, building tools for the structured products team in Zurich. Before that, I worked at <span class="exp" data-link>Quadrivio</span>, a PE fund focused on luxury goods M&amp;A. Before Quadrivio, I worked full time at <span class="exp" data-link>Astrolab</span>, a crypto cross-chain yield aggregator (a kind of crypto-hedge fund), where I built ML data-ingestion pipelines and much more. Before Astrolab, I had the pleasure to work with <span class="exp" data-link>DRIFE</span>, an Indian blockchain-uber startup that focused on reverse engineering the uber black box pricing algorithm into an open-sourced and driver-friendly framework.</p>
+  </section>
+
+  <section class="cv">
+    <h2>Experience</h2>
+    {experience.map((e) => (
+      <div class="row exrow" data-link><span class="nm">{e.name}</span><span class="dt">{e.date}</span></div>
+    ))}
+  </section>
+
+  <section class="cv">
+    <h2>Education</h2>
+    {education.map((e) => (
+      <div class="row exrow" data-link><span class="nm">{e.name}</span><span class="dt">{e.date}</span></div>
+    ))}
+  </section>
+
+  <section class="qa">
+    <h2>More</h2>
+    <details><summary>Who am I?</summary><p class="prose">I'm British and Swiss, but my family roots run in all directions. I speak 4 languages, and learning another. I'm an extrovert. I love meeting new people and seeking completely novel, unrelated experiences. I tend to learn a lot from people.</p></details>
+    <details><summary>What do I like doing?</summary><p class="prose">I like solving complex real world problems, especially those at the company level, which can involve optimisation or improvement. This stems from my passion of Philosophy, Data Science and Maths, disciplines that can be thought of as tools to zoom in/out of problems. Philosophy allows you to ask big questions, and maths dissects those questions, similar to how a scientist formulates his initial hypothesis and then gets down to practical work.</p></details>
+    <details><summary>Who am I really?</summary><p class="prose">I'm an extrovert. I'm drawn to interesting people, and won't waste time with people that aren't. I'm practical, extremely self-aware, and a self-starter. I see the good in things, but I am also skeptical. I believe in the pursuit of truth, and am a strong believer in democracy and capitalism. I don't like BS. I have a 6th sense for understanding the person in front of me.</p></details>
+  </section>
+</Base>

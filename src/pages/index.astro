@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import writing from '../data/writing.json';
+---
+<Base title="Philip Bunford" page="home">
+  <header class="hero">
+    <span class="brand ic ic-menu" aria-hidden="true"></span>
+    <h1>Philip Bunford</h1>
+    <p class="lede">24 year-old life enthusiast. Doing things that matter.</p>
+    <div class="contact" id="contact">
+      <button class="icon-btn" id="contact-btn" data-link aria-label="Contact"><span class="ic ic-contact"></span></button>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/philipbunford/">LinkedIn</a>
+        <a href="https://philipbunford.substack.com">Substack</a>
+        <a href="https://github.com/PHIL-E-B3">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="writing">
+    <h2>Writing &amp; Projects</h2>
+    {writing.map((p) => (
+      <a class="row" href={p.url} target="_blank" rel="noopener" data-link>
+        <strong>{p.title}</strong><span class="meta mono">{p.date}</span>
+      </a>
+    ))}
+  </section>
+
+  <section style="min-height:70vh; display:flex; align-items:center">
+    <p class="quote">"And those who were seen dancing were thought to be insane by those who could not hear the music."</p>
+  </section>
+</Base>
