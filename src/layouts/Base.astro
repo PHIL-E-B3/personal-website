@@ -4,28 +4,45 @@ import manual from '../data/contributions.json';
 
 const USER = 'PHIL-E-B3';
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const START_YEAR = 2022;
 
-// live GitHub activity (public feed, no token) merged with manual entries
-let daily = [];
-try {
-  const r = await fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`);
-  if (r.ok) { const j = await r.json(); daily = j.contributions || []; }
-} catch (e) { /* build still succeeds if the feed is down */ }
-
+// fetch contributions for each year from START_YEAR to current
+const now = new Date();
+const currentYear = now.getFullYear();
 const byDate = {};
-for (const d of daily) byDate[d.date] = (byDate[d.date] || 0) + (d.count || 0);
+
+for (let year = START_YEAR; year <= currentYear; year++) {
+  try {
+    const r = await fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=${year}`);
+    if (r.ok) {
+      const j = await r.json();
+      const daily = j.contributions || [];
+      for (const d of daily) byDate[d.date] = (byDate[d.date] || 0) + (d.count || 0);
+    }
+  } catch (e) { /* build still succeeds if the feed is down */ }
+}
+
+// merge manual entries
 for (const m of manual) byDate[m.date] = (byDate[m.date] || 0) + (m.count || 1);
 
-const now = new Date();
-const months = [];
-for (let i = 0; i < 12; i++) {
-  const dt = new Date(now.getFullYear(), now.getMonth() - i, 1);
-  const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-  let count = 0;
-  for (const k in byDate) if (k.startsWith(key)) count += byDate[k];
-  months.push({ label: MONTHS[dt.getMonth()], year: dt.getFullYear(), count });
+// build monthly data for each year
+const yearData = {};
+for (let year = START_YEAR; year <= currentYear; year++) {
+  const months = [];
+  const isCurrentYear = year === currentYear;
+  const monthCount = isCurrentYear ? now.getMonth() + 1 : 12;
+
+  for (let month = monthCount - 1; month >= 0; month--) {
+    const key = `${year}-${String(month + 1).padStart(2,'0')}`;
+    let count = 0;
+    for (const k in byDate) if (k.startsWith(key)) count += byDate[k];
+    months.push({ label: MONTHS[month], month: month, year, count });
+  }
+
+  yearData[year] = months;
 }
-const siteData = { months };
+
+const siteData = { yearData, currentYear, startYear: START_YEAR };
 
 const { title = 'Philip Bunford', page = 'home' } = Astro.props;
 ---
@@ -59,6 +76,7 @@ const { title = 'Philip Bunford', page = 'home' } = Astro.props;
     <slot />
   </main>
 
+  <div id="year-selector" aria-label="Year selector"></div>
   <nav id="rail" aria-label="Monthly activity"></nav>
   <div id="tip"></div>
 

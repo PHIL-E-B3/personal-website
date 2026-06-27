@@ -1,14 +1,21 @@
 (function(){
   var dataEl=document.getElementById('site-data');
-  var DATA=dataEl?JSON.parse(dataEl.textContent):{months:[]};
-  var months=DATA.months||[];
+  var DATA=dataEl?JSON.parse(dataEl.textContent):{yearData:{},currentYear:new Date().getFullYear()};
+  var yearData=DATA.yearData||{};
+  var currentYear=DATA.currentYear||new Date().getFullYear();
+  var selectedYear=currentYear;
+  var months=yearData[selectedYear]||[];
 
   /* build plexus nodes: one per contribution, tagged by month (0 = newest) */
-  var nodes=[], id=0, TOTAL=0;
-  months.forEach(function(m){ TOTAL+=m.count; });
-  var scale=TOTAL>120?120/TOTAL:1;
-  months.forEach(function(m,mi){ var k=m.count>0?Math.max(1,Math.round(m.count*scale)):0; for(var j=0;j<k;j++) nodes.push({id:id++,month:mi}); });
-  while(nodes.length<16){ nodes.push({id:id++,month:Math.floor(Math.random()*Math.max(1,months.length))}); }
+  var nodes=[], id=0;
+  function rebuildNodes(){
+    nodes=[]; id=0; var TOTAL=0;
+    months.forEach(function(m){ TOTAL+=m.count; });
+    var scale=TOTAL>120?120/TOTAL:1;
+    months.forEach(function(m,mi){ var k=m.count>0?Math.max(1,Math.round(m.count*scale)):0; for(var j=0;j<k;j++) nodes.push({id:id++,month:mi}); });
+    while(nodes.length<16){ nodes.push({id:id++,month:Math.floor(Math.random()*Math.max(1,months.length))}); }
+  }
+  rebuildNodes();
   var N=nodes.length;
 
   /* theme toggle (persisted) */
@@ -55,17 +62,56 @@
   function setNode(nid,el){ activeSet=new Set([nid]); activeEl=el; single=true; }
   function clearH(){ activeSet=new Set(); activeEl=null; single=false; }
 
+  /* year selector */
+  var yearSelector=document.getElementById('year-selector');
+  if(yearSelector){
+    var startYear=DATA.startYear||2022;
+    for(var y=currentYear; y>=startYear; y--){
+      (function(year){
+        var btn=document.createElement('button');
+        btn.className='year-btn'+(year===selectedYear?' active':'');
+        btn.textContent=year;
+        btn.addEventListener('click',function(){
+          selectedYear=year;
+          months=yearData[selectedYear]||[];
+          rebuildNodes();
+          N=nodes.length;
+          renderRail();
+          updateYearButtons();
+          seed();
+        });
+        yearSelector.appendChild(btn);
+      })(y);
+    }
+  }
+
+  function updateYearButtons(){
+    var btns=yearSelector.querySelectorAll('.year-btn');
+    btns.forEach(function(btn){
+      btn.classList.toggle('active', parseInt(btn.textContent)===selectedYear);
+    });
+  }
+
   /* rail (12 months) */
   var rail=document.getElementById('rail'), tip=document.getElementById('tip');
-  if(rail){ months.forEach(function(m,mi){ var row=document.createElement('div'); row.className='mrow';
-    var lbl=document.createElement('span'); lbl.className='mlbl'+(mi===0?' cur':''); lbl.textContent=m.label;
-    var dot=document.createElement('span'); dot.className='dot'; var s=Math.min(32, 6+m.count*2.0); dot.style.width=s+'px'; dot.style.height=s+'px';
-    row.appendChild(lbl); row.appendChild(dot);
-    var fid=null; for(var qi=0;qi<nodes.length;qi++){ if(nodes[qi].month===mi){ fid=nodes[qi].id; break; } }
-    (function(fid,dotEl){ row.addEventListener('mouseenter',function(e){ if(fid!==null) setNode(fid,dotEl); showTip(m.label+' '+m.year+' &middot; <b>'+m.count+'</b> contributions',e); });
-      row.addEventListener('mousemove',moveTip);
-      row.addEventListener('mouseleave',function(){ clearH(); hideTip(); }); })(fid,dot);
-    rail.appendChild(row); }); }
+  function renderRail(){
+    if(!rail) return;
+    rail.innerHTML='';
+    months.forEach(function(m,mi){
+      var row=document.createElement('div'); row.className='mrow';
+      var lbl=document.createElement('span'); lbl.className='mlbl'+(mi===0?' cur':''); lbl.textContent=m.label;
+      var dot=document.createElement('span'); dot.className='dot'; var s=Math.min(32, 6+m.count*2.0); dot.style.width=s+'px'; dot.style.height=s+'px';
+      row.appendChild(lbl); row.appendChild(dot);
+      var fid=null; for(var qi=0;qi<nodes.length;qi++){ if(nodes[qi].month===mi){ fid=nodes[qi].id; break; } }
+      (function(fid,dotEl){
+        row.addEventListener('mouseenter',function(e){ if(fid!==null) setNode(fid,dotEl); showTip(m.label+' '+m.year+' &middot; <b>'+m.count+'</b> contributions',e); });
+        row.addEventListener('mousemove',moveTip);
+        row.addEventListener('mouseleave',function(){ clearH(); hideTip(); });
+      })(fid,dot);
+      rail.appendChild(row);
+    });
+  }
+  if(rail) renderRail();
 
   /* every [data-link] element points a filament to one blob */
   var linkEls=Array.prototype.slice.call(document.querySelectorAll('[data-link]'));
