@@ -63,34 +63,32 @@
   function setNode(nid,el){ activeSet=new Set([nid]); activeEl=el; single=true; }
   function clearH(){ activeSet=new Set(); activeEl=null; single=false; }
 
-  /* year selector */
+  /* year selector - single cycling button */
   var yearSelector=document.getElementById('year-selector');
+  var yearBtn=null;
   if(yearSelector){
     var startYear=DATA.startYear||2022;
-    for(var y=currentYear; y>=startYear; y--){
-      (function(year){
-        var btn=document.createElement('button');
-        btn.className='year-btn'+(year===selectedYear?' active':'');
-        btn.textContent=year;
-        btn.addEventListener('click',function(){
-          selectedYear=year;
-          months=yearData[selectedYear]||[];
-          rebuildNodes();
-          N=nodes.length;
-          renderRail();
-          updateYearButtons();
-          seed();
-        });
-        yearSelector.appendChild(btn);
-      })(y);
-    }
-  }
+    var availableYears=[];
+    for(var y=startYear; y<=currentYear; y++) availableYears.push(y);
 
-  function updateYearButtons(){
-    var btns=yearSelector.querySelectorAll('.year-btn');
-    btns.forEach(function(btn){
-      btn.classList.toggle('active', parseInt(btn.textContent)===selectedYear);
+    yearBtn=document.createElement('button');
+    yearBtn.className='year-btn';
+    yearBtn.textContent=selectedYear;
+    yearBtn.setAttribute('aria-label', 'Cycle through years');
+
+    yearBtn.addEventListener('click',function(){
+      var idx=availableYears.indexOf(selectedYear);
+      idx=(idx+1)%availableYears.length;
+      selectedYear=availableYears[idx];
+      yearBtn.textContent=selectedYear;
+      months=yearData[selectedYear]||[];
+      rebuildNodes();
+      N=nodes.length;
+      renderRail();
+      seed();
     });
+
+    yearSelector.appendChild(yearBtn);
   }
 
   /* rail (12 months) */
